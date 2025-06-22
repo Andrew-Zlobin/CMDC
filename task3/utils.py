@@ -70,5 +70,5 @@ def BWT_DC_decode_pipeline(func):
         dc_text = array_to_encode[1:]
         alphabet = number_to_alphabet(int_alphabet)
         dc_decoded = DC.decode(dc_text, alphabet, text_len)
-        return dc_decoded
+        return dc_decoded[:len(dc_decoded) - 1]
     return handler
