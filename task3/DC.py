@@ -1,24 +1,8 @@
-# import traceback
-class BWT:
-    __char_spacing = None
-    @staticmethod
-    def build_char_spacing(text : str):
-        spacing_counters = {symb : 0 for symb in set(text)}
-        char_spacing = [0 for _ in range(len(text))]
-        for i in range(len(text) - 1, -1, -1):
-            if spacing_counters[text[i]] != 0:
-                char_spacing[i] = spacing_counters[text[i]] - i
-                spacing_counters[text[i]] = i
-            else:
-                spacing_counters[text[i]] = i
-        BWT.__char_spacing = char_spacing
-    @staticmethod
-    def get_char_spacing():
-        return BWT.__char_spacing
+from BWT import BWT
 
 class DC:
     @staticmethod
-    def code(bwt_string : str, alphabet : str, char_spacing: list):
+    def code(bwt_string : str, alphabet : str, char_spacing: list[int]):
         x = alphabet + bwt_string
         n = len(x)
         is_known = [False] * n
@@ -81,7 +65,7 @@ class DC:
         bwt_part = X[alphabet_size:]
         if UNKNOWN in bwt_part:
             raise ValueError("Декодирование завершено, но остались неизвестные символы. Поток был неполным.")
-        
+        # print("сколько надекодировали в DC", len(bwt_part), '\x01' in bwt_part, '\x01' in alphabet)
         return "".join(bwt_part)
 
 
