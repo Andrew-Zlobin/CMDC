@@ -30,6 +30,7 @@ def file_management_on_encode(func):
         if not text:
             raise FileNotFoundError
         res = func(text)
+        print("compressed to", len(res), "bytes, (or", round(len(res) / 1024 / 1024, 3), "MB)")
         with open(output_path, "wb") as file:
             file.write(res)
     return handler

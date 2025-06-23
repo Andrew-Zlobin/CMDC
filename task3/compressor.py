@@ -5,10 +5,12 @@ from utils import file_management_on_decode, file_management_on_encode, BWT_DC_e
 from compression.elias import Elias
 from compression import arithmetic
 from compression import arithmeticcoding
+from compression.fibonacci import FibonacciCoder
+from compression import fibonacci
 from compression import overflow
 elias = Elias()
+fibonacci = FibonacciCoder()
 
-# Заглушки для функций кодирования/декодирования
 @file_management_on_encode
 @BWT_DC_encode_pipeline
 def encode_arithmetic(list_to_encode):
@@ -39,6 +41,17 @@ def overflow_encode(list_to_encode):
 def overflow_decode(text_to_decode):
     return overflow.decode(text_to_decode)
 
+@file_management_on_encode
+@BWT_DC_encode_pipeline
+def fibonacci_encode(list_to_encode):
+    return fibonacci.encode(list_to_encode)
+
+@file_management_on_decode
+@BWT_DC_decode_pipeline
+def fibonacci_decode(text_to_decode):
+    return fibonacci.decode(text_to_decode)
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="CLI архиватор с поддержкой различных методов кодирования.",
@@ -57,6 +70,7 @@ def parse_args():
     group.add_argument("-a", "--arithmetic", action="store_true", help="Использовать арифметическое кодирование")
     group.add_argument("-d", "--delta", action="store_true", help="Использовать дельта-кодирование")
     group.add_argument("-o", "--overflow", action="store_true", help="Использовать overflow-кодирование")
+    group.add_argument("-i", "--fibonacci", action="store_true", help="Использовать кодирование фибоначчи")
 
     return parser.parse_args()
 
@@ -89,8 +103,13 @@ def main():
             overflow_encode(input_path, output_path)
         else:
             overflow_decode(input_path, output_path)
+    elif args.fibonacci:
+        if is_encoding:
+            fibonacci_encode(input_path, output_path)
+        else:
+            fibonacci_decode(input_path, output_path)
     else:
-        print("Ошибка: необходимо выбрать один из режимов (-g, -d, -o)")
+        print("Ошибка: необходимо выбрать один из режимов (-a, -d, -o, -i)")
         sys.exit(1)
 
 if __name__ == "__main__":

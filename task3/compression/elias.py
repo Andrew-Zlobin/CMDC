@@ -73,7 +73,7 @@ class Elias:
         while current_pos < len(bit_string):
             if counter_poses < current_pos:
                 counter_poses += 1000
-                print(current_pos)
+                # print(current_pos)
             if bit_string[current_pos:].startswith('11'):
                 decoded_numbers.append(0)
                 current_pos += 2
