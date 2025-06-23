@@ -70,12 +70,14 @@ class DC:
 
 
 if __name__ == "__main__":
-    test_cases = [(("а#ннБннБаааа", "#Бан"), [2, 4, 1, 1, 5, 0, 1, 2, 0, 0])]
+    test_cases = [(("а#ннБннБаааа", "#Бан"), [2, 4, 1, 1, 5, 0, 1, 2, 0, 0]),
+                  (("a\x01nnBnnBaaaa", "\x01Ban"), [2, 4, 1, 1, 5, 0, 1, 2, 0, 0])]
     for test_case in test_cases:
         if test_case[1] != None:
             BWT.build_char_spacing(test_case[0][1] + test_case[0][0])
             # print(list(test_case[0][1] + test_case[0][0]))
             # print(BWT.get_char_spacing())
-            print("code :", DC.code(test_case[0][0], test_case[0][1], BWT.get_char_spacing()) == test_case[1])
+            encode = DC.code(test_case[0][0], test_case[0][1], BWT.get_char_spacing())
+            print("code :",encode == test_case[1], '\x01' in DC.decode(encode, test_case[0][1], len(test_case[0][0])))
             # print(test_case[1], DC.code(test_case[0][0], test_case[0][1], BWT.get_char_spacing()))
             # print("decode :", DC.decode( DC.code(test_case[0][0], test_case[0][1]), test_case[0][1], len(test_case[0][0])) == test_case[0][0])

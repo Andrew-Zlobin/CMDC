@@ -49,7 +49,7 @@ def file_management_on_decode(func):
 def BWT_DC_encode_pipeline(func):
     def handler(text):
         bwt_text = BWT.forward(text)
-        alphabet = "".join(sorted(list(set(text))))
+        alphabet = '\x01'+ "".join(sorted(list(set(text))))
         int_alphabet = alphabet_to_number(alphabet)
         # print(int_alphabet)
         dc_text = DC.code(bwt_text, alphabet, BWT.get_char_spacing())
@@ -70,5 +70,7 @@ def BWT_DC_decode_pipeline(func):
         dc_text = array_to_encode[1:]
         alphabet = number_to_alphabet(int_alphabet)
         dc_decoded = DC.decode(dc_text, alphabet, text_len)
-        return dc_decoded[:len(dc_decoded) - 1]
+        bwt_decoded = BWT.reverse(dc_decoded)
+        return bwt_decoded#[:len(bwt_decoded) - 1]
+        # return dc_decoded[:len(dc_decoded) - 1]
     return handler

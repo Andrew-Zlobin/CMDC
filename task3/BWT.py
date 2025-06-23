@@ -67,9 +67,10 @@ class BWT:
 
     @staticmethod
     def forward(line: str):
-        BWT.build_char_spacing("".join(sorted(list(set(line)))) + line)
+        bwt_line = bwt(line)
+        BWT.build_char_spacing("".join(sorted(list(set(bwt_line)))) + bwt_line)
         # print("really start bwt")
-        return bwt(line)
+        return bwt_line
 
     @staticmethod
     def reverse(shuffled_line : str):
@@ -78,8 +79,10 @@ class BWT:
 if __name__ == "__main__":
     # test_cases = [("абракадабра", None),
     #               ("БанБананана", None)]
-    test_cases = [("abracadabra", None)]
+    test_cases = [("abracadabra", None),
+                  ("BanBananana", None)]
     for test_case in test_cases:
         shuffled = BWT.forward(test_case[0])
+        
         res = BWT.reverse(shuffled)
-        print(test_case[0], shuffled, res, test_case[0] == res)
+        print(test_case[0], shuffled, res, test_case[0] == res, '\x01' in shuffled)
