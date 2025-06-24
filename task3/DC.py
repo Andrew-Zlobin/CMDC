@@ -1,8 +1,10 @@
+from tqdm import tqdm
 from BWT import BWT
 
 class DC:
     @staticmethod
     def code(bwt_string : str, alphabet : str, char_spacing: list[int]):
+        print("dc coding")
         x = alphabet + bwt_string
         n = len(x)
         is_known = [False] * n
@@ -13,7 +15,10 @@ class DC:
         num_known_symbols = len(alphabet)
 
         i = 0
+        pbar = tqdm(total=n)
         while num_known_symbols < n:
+            old_value = num_known_symbols
+
             if not is_known[i]:
                 i += 1
                 continue
@@ -35,6 +40,9 @@ class DC:
             i += 1
             if i >= n:
                 i = 0
+            delta = num_known_symbols - old_value
+            if delta > 0:
+                pbar.update(delta)
 
         return encoded_output
     @staticmethod

@@ -8,6 +8,7 @@ from compression import arithmeticcoding
 from compression.fibonacci import FibonacciCoder
 from compression import fibonacci
 from compression import overflow
+from compression import overflow_arithmetic
 elias = Elias()
 fibonacci = FibonacciCoder()
 
@@ -51,6 +52,16 @@ def fibonacci_encode(list_to_encode):
 def fibonacci_decode(text_to_decode):
     return fibonacci.decode(text_to_decode)
 
+@file_management_on_encode
+@BWT_DC_encode_pipeline
+def overflow_arithmetic_encode(list_to_encode):
+    return overflow_arithmetic.encode(list_to_encode)
+
+@file_management_on_decode
+@BWT_DC_decode_pipeline
+def overflow_arithmetic_decode(text_to_decode):
+    return overflow_arithmetic.decode(text_to_decode)
+
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -71,6 +82,7 @@ def parse_args():
     group.add_argument("-d", "--delta", action="store_true", help="Использовать дельта-кодирование")
     group.add_argument("-o", "--overflow", action="store_true", help="Использовать overflow-кодирование")
     group.add_argument("-i", "--fibonacci", action="store_true", help="Использовать кодирование фибоначчи")
+    group.add_argument("-c", "--combo_arithmetic_overflow", action="store_true", help="Использовать кодирование с переполнением а потом арифметическое")
 
     return parser.parse_args()
 
@@ -108,6 +120,11 @@ def main():
             fibonacci_encode(input_path, output_path)
         else:
             fibonacci_decode(input_path, output_path)
+    elif args.combo_arithmetic_overflow:
+        if is_encoding:
+            overflow_arithmetic_encode(input_path, output_path)
+        else:
+            overflow_arithmetic_decode(input_path, output_path)
     else:
         print("Ошибка: необходимо выбрать один из режимов (-a, -d, -o, -i)")
         sys.exit(1)

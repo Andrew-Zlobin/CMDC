@@ -1,9 +1,9 @@
 import io
-# import arithmeticcoding
+#import arithmeticcoding
 from . import arithmeticcoding
 import struct
 
-def encode(source_message: list) -> bytearray:
+def encode(source_message: list, N=32) -> bytearray:
     alphabet = sorted(list(set(source_message)))
     symbol_map = {symbol: i for i, symbol in enumerate(alphabet)}
     source_message = [symbol_map[s] for s in source_message]
@@ -14,7 +14,7 @@ def encode(source_message: list) -> bytearray:
 
     buffer = io.BytesIO()
     bitout = arithmeticcoding.BitOutputStream(buffer)
-    enc = arithmeticcoding.ArithmeticEncoder(32, bitout)
+    enc = arithmeticcoding.ArithmeticEncoder(N, bitout)
 
     for symbol in source_message:
         enc.write(freqs, symbol)
@@ -33,7 +33,7 @@ def encode(source_message: list) -> bytearray:
 
 
 
-def decode(encoded_sequence: bytearray)-> list:
+def decode(encoded_sequence: bytearray, N = 32)-> list:
     offset = 0
     message_len, alphabet_size = struct.unpack_from('II', encoded_sequence, offset)
     offset += 8
@@ -51,7 +51,7 @@ def decode(encoded_sequence: bytearray)-> list:
     decoded_message = []
     buffer = io.BytesIO(compressed_bytes)
     bitin = arithmeticcoding.BitInputStream(buffer)
-    dec = arithmeticcoding.ArithmeticDecoder(32, bitin)
+    dec = arithmeticcoding.ArithmeticDecoder(N, bitin)
 
     for _ in range(message_len):
         symbol = dec.read(freqs)
